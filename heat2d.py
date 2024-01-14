@@ -97,6 +97,9 @@ def run_simulation(width, height, steps):
         # prev[:] = data
         np.copyto(prev, data)
         apply_stencil(data, width, height, n % 2)
+        if(n == (steps/4) or n == (steps/2)):
+            plt.imshow(np.reshape(data, (width, height)), interpolation="none")
+            plt.show()
         # Compute the elementwise difference, and sum the differences
         delta = compute_delta(data, prev, width, height)
         # Check the delta
@@ -108,7 +111,6 @@ def run_simulation(width, height, steps):
 
     # Make 2D for plotting
     plt.imshow(np.reshape(data, (width, height)), interpolation="none")
-    plt.show()
     print("Before plt.show()")
     plt.show()
 
