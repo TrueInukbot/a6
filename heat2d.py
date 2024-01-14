@@ -2,11 +2,11 @@
 
 import ctypes
 import numpy as np
-import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import sys
 import time
+import os
+print(os.getcwd())
 
 # Set this to True to use the C-accelerated implementation.
 use_c = True
@@ -15,9 +15,10 @@ use_c = True
 heateqclib = None
 
 def use_clib():
-    
     global heateqclib
-    heateqclib = ctypes.CDLL('./heat-equation.so')
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    so_path = os.path.join(current_dir, 'heat-equation.so')
+    heateqclib = ctypes.CDLL(so_path)
     heateqclib.compute_delta.restype = ctypes.c_float
 
 
@@ -58,7 +59,7 @@ def apply_stencil(data, width, height, offset, alpha = 0.2):
 # Helper method to create visualization of the steps
 def plot_image(data, width, height, iteration):
     plt.imshow(np.reshape(data, (width, height)), interpolation="none")
-    plt.savefig("plots/fig-%sx%s-step%s.pdf" % (width, height, iteration))
+    plt.show()
 
 
 # Computes the average elementwise difference between two arrays
@@ -85,7 +86,7 @@ def run_simulation(width, height, steps):
 
     # Prepare the buffer
     write_borders(data, width, height)
-    #plot_image(data, width, height, 0)
+    plot_image(data, width, height, 0)
 
     # Declare variable for use outside the loop
     delta = 0.0
@@ -107,6 +108,8 @@ def run_simulation(width, height, steps):
 
     # Make 2D for plotting
     plt.imshow(np.reshape(data, (width, height)), interpolation="none")
+    plt.show()
+    print("Before plt.show()")
     plt.show()
 
 if __name__ == "__main__":
