@@ -107,6 +107,6 @@ int main(int argc, char** argv) {
     run_simulation((size_t)width, (size_t)height, (size_t)steps, filename);
 
     return 0;
-}
+
 
 
